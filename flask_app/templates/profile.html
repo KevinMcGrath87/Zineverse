@@ -108,8 +108,16 @@
                 </div>
                 <div class = "right">
                     <div class = "box">
-                        <h3>put either friends/other stuff here..</h3>
+                        <h3>your friends:</h3>
+                        {%for friend in userFriends%}
+                            {{friend.username}}
+                        {%endfor%}
+                        <h3>your pending friend requests:</h3>
+                        {%for friend in userRequests%}
+                            {{friend.username}}
+                        {%endfor%}
                     </div>
+
                 </div>
             </div>
         </div>
