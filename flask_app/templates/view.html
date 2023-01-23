@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel = 'stylesheet' href = "{{url_for('static',filename = 'style.css')}}">
+    <link rel = 'stylesheet' href = "../static/style.css"
+</head>
+<body>
+    <div class = "container">
+        <div class = "navbar">
+            <div class = "title">
+                <h1>The Zinester's Zineverse</h1>
+            </div>
+            <div class = "navbuttons">
+                <a href = "">About</a>
+                <a href = "/search">Search</a>
+                <a href = "/logout">Logout</a>
+                <a href = "/profile">Home</a>
+            </div>
+        </div>
+        <div class = "body">
+            <div class = "left">
+                <!--here will need to flesh out some jinja to get the pages of the zine.-->
+                <form method = "post" action = "/arrowClick/{{currentPage}}/{{fileArray|length}}/{{zineId}}">
+                    <input type = "hidden" name = "click" value = "down">
+                    <button type ="submit" >
+                        <img class = "left_arrow" src = "{{url_for('static',filename = 'arrow.png')}}"alt="an arrow"> 
+                    </button>
+                </form>
+                </div>
+            <div class = "mid">
+                <div class = "box">
+                    {%set address = ''%}
+                    {%set address =  'zinelib' + '/' +zineTitle + '/' + fileArray[currentPage] %}
+                    <img src = "">
+                    <img src = "{{url_for('static',filename = address)}}" alt = "no image displayed">
+                </div>
+            </div>
+            <div class = "right">
+                <form method ="post" action = "/arrowClick/{{currentPage}}/{{fileArray|length}}/{{zineId}}">
+                    <input type = "hidden" name ="click" value = "up">
+                    <button type = "submit">
+                        <img class = "right_arrow" src = "{{url_for('static',filename = 'arrow.png')}}" alt = "a right arrow">
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class = "description">
+            <div class = "left"></div>
+            <div class = "mid"><h2>Description:</h2><p>{{zineToView.description}}</p></div>
+            <div class = "right"></div>
+        </div>
+        <div class = "mid">
+            <div class = "comments">
+                <div class = "comment-form">
+                    <form class = "new_comment" action ="/post_wall" method = 'post'>
+                        <input type -"text" name = "comment" value = "create a post">
+                        <input type ="hidden" name = 'user_id'}>
+                        <input type ="submit">
+                    </form>
+                <div class = "wall">
+                    {% for comment in comments%}
+                        <div class = "comment">
+                            <div class ="comment-author"><h3>{{comment.author}} Commented:</h3></div>
+                            <div class ="comment-text"><p>{{comment.text}}</p></div>
+                            <ol>
+                                {% for reply in comment.replies %}
+                                    <li>
+                                        <div class = "reply">
+                                            <p>{{reply.text}}</p>
+                                        </div>
+                                    </li>
+                                {%endfor%}
+                            </ol>
+                        </div>
+                    {%endfor%}
+                </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

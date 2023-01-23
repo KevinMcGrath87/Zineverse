@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel = 'stylesheet' href = "{{url_for('static',filename = 'style.css')}}">
+    <link rel = 'stylesheet' href = "../static/style.css">
+</head>
+<body>
+    <div class = "container">
+        <div class = "navbar">
+            <div class = "title">
+                <h1>The Zinester's Zineverse</h1>
+            </div>
+            <div class = "navbuttons">
+                <a href = "">About</a>
+                <a href = "/search">Search</a>
+                <a href = "/logout">Logout</a>
+            </div>
+        </div>
+        <div class = "body">
+            <div class = "left">
+                <div class = "box">
+                    <!--here will need to flesh out some jinja to get the pages of the zine.-->
+                    <div class = "user_image"></div>
+                    <div class = "user_info">
+                        <h3>{{currentUser.username}}</h3>
+                        <h3>{{currentUser.email}}</h3>
+                        <!--consider adding more info like 'created at etc.'-->
+                    </div>
+                    <h3>Start a new zine!</h3>
+                    {%with messages = get_flashed_messages()%}
+                    {%for message in messages%}
+                    <p>{{message}}</p>
+                    {%endfor%}
+                    {%endwith%}
+                    <form method = 'post' action = '/create_zine'>
+                        <input type = "hidden" value = "{{currentUser.id}}" name = "user">
+                        <input type = "text" value = "title" name = "title">
+                        <input type = "text" value = "author" name = "author">
+                        <input type = "text" value = "description" name = "description">
+                        <input type ="submit" value = "submit">
+<!--will generate path data after form is submitted from the "title" value-->
+                    </form>
+                    <h3>upload a page to a zine</h3>
+                    <form method = "post" enctype="multipart/form-data" action = "/upload">
+                        <select name ="zine">
+                            <option value = "">select a zine to upload the page to</option>
+                                {%for zine in currentUser.zines%}
+                                    <option name = "name" value = "{{zine.id}}">{{zine.title}}</option>
+                                {%endfor%}
+                        </select>
+                        <input type = "file" name = "file">
+                        <input type = "submit" value ="upload a page to a zine!">
+                    </form>
+                    
+                </div>
+            </div>
+            <div class = "mid">
+                <h1>User's Zines</h1>
+                <div class = "box column">
+                    <table class ="usersZines">
+                    {% for zine in currentUser.zines %}
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Uploaded At:</th>
+                            <th>View</th>
+                        </tr>
+                            <tr>
+                            <td>
+                                <p class = "title">{{zine.title}}</p>
+                            </td>
+                            <td>
+                                <p>{{zine.author}}</p>
+                            </td>
+                            <td>
+                                <p>{{zine.created_at}}</p>
+                            </td>
+                            <td>
+                                <form action = "/view" method = "post">
+                                    <input name = "zineId" type = "hidden" value ="{{zine.id}}">
+                                    <input type = "submit" value = "view">
+                                </form>
+                                <form action = "/edit/{{zine.id}}" method ="get">
+                                    <input name = "zineId" type = "hidden" value = {{zine.id}}>
+                                    <input type ="submit" value = "edit">
+                                </form>
+                                <form action = "/delete/{{zine.id}}" method = post>
+                                    <input name = "zineId" type = "hidden" value = "{{zine.id}}">
+                                    <input type = "submit" value = "delete">
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>views:</p>
+                            </td>
+                            <td>
+                                <p>""</p>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </table>
+                </div>
+                </div>
+                <div class = "right">
+                    <div class = "box">
+                        <h3>put either friends/other stuff here..</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class = "collections">
+            <div class = "left">></div>
+            <div class = "mid"><h2>middle</h2><p>this is where the collections are populated</p>
+                {% for zine in currentUser.zines %}
+                <table>
+                    <tr>
+                        <td>{{zine.title}}</td>
+                        <td>{{zine.author}}</td>
+                        <td>
+                            <form>
+                                <input type ="button">
+                                <input type = "button">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            {%endfor%}
+            </div>
+            <div class = "right"></div>
+    </div>
+</body>
+</html>

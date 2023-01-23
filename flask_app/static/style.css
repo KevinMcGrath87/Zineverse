@@ -1,0 +1,178 @@
+* {
+    margin:0;
+    padding:0;
+    font-family:'Courier New', Courier, monospace;
+}
+img {
+
+    max-width: 450px;
+    height:auto;
+}
+
+
+
+.error {
+    color:red;
+}
+.navbuttons a:visited {
+    text-decoration: none;
+
+}
+.box {
+    display:flex;
+    flex-direction: column;
+    height: 550px;
+    width:auto;
+    border: 1px solid black;
+    align-items: center;
+    overflow:scroll;
+}
+
+.box p {
+    color:white;
+}
+
+.box form {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.box table.usersZines  {
+    /* border-collapse:separate; */
+    margin-bottom:20px;
+    padding:50px;
+}
+
+/* .box .seperator{
+    width: 100%;
+    height:1px;
+    border:1px solid black;
+} */
+
+
+.navbuttons a {
+    text-decoration: none;
+    font-size:x-large;
+    font-weight: bold;
+    color:black;
+    border-right: 1px solid black;
+    padding-right: 20px;
+
+
+}
+.spacer{
+    grid-area: spacer;
+    background-color:rgb(116, 31, 116);
+}
+
+.left {
+    /* margin-left: 80px; */
+    min-width: 200px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background-color: white;
+    /* border:1px solid black; */
+    grid-area: left;
+    /* place-items: center; */
+    background-image: url("bg2.jpg");
+}
+.right {
+    background-image: url("bg2.jpg");
+    /* margin-right:80px; */
+    min-width: 200px;
+    display:flex;
+    flex-direction: column;
+    background-color:white;
+    /* border:1px solid black; */
+    grid-area: right;
+    align-items: center;
+    justify-content: center;
+}
+
+.right_arrow{
+    transform:scaleX(-1);
+}
+
+
+.mid {
+    display:flex;
+    flex-flow:row;
+    flex-direction: column;
+    background-color:gray;
+    grid-area: mid;
+    align-items: center;
+    border: 1px solid black;
+    color:white;
+
+}
+.mid .box {
+    display: flex;
+    max-height: fit-content;
+    max-width:auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.wideBox {
+    display: flex;
+    min-width: 200px;
+    max-width: 500px;
+    align-items:center;
+    justify-content:center;
+
+}
+
+.navbar {
+    background-image: url("background.jpg") ;
+    display:grid;
+    padding:10px;
+    border: 3px solid black;
+    background-color: rgb(255, 255, 255);
+    grid-template-columns: [left] minmax(100px, 2fr) [middle] minmax(100px, 1fr)[right];
+    grid-template-rows:[top] 1fr [bottom];
+    column-gap: 20px;
+    align-items: center;
+}
+
+.body {
+    background-image: url("bg2.jpg");
+    display:grid;
+    grid-template-columns:[col1-start] minmax(10px, 1fr)[col1-end col2-start] minmax(200px, auto) [col2-end col3-start] minmax(10px, 1fr)[col3-end];
+    grid-template-rows: auto;
+    /* grid-template-areas:"spacer spacer spacer""left mid right"; */
+    grid-template-areas: "left mid right";
+    /* gap: 20px 20px; */
+}
+
+.description {
+    display: grid;
+    grid-template-columns:[col1-start] minmax(100px, 1fr)[col1-end col2-start] minmax(200px, 2fr) [col2-end col3-start] minmax(100px, 1fr)[col3-end];
+    grid-template-rows:auto;
+    grid-template-areas:"left mid right";
+
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-weight: bold;
+}
+td{
+    margin-right:20px;
+    padding:20px;
+
+}
+
+.half {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: auto;
+    border: 1px solid black;
+}
