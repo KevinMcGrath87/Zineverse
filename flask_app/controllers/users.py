@@ -29,7 +29,7 @@ def register():
         print(currentUser)
         return(redirect('/profile'))
     else:
-        return(redirect('/'))
+        return(redirect('/login_register'))
 
 @app.route('/login', methods = ['POST'])
 def login():
@@ -42,7 +42,7 @@ def login():
         session['user'] = currentUser.id
         return(redirect('/profile'))
     else:
-        return(redirect('/'))
+        return(redirect('/login_register'))
 
 @app.route('/logout')
 def logout():
