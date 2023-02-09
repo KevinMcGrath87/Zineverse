@@ -29,7 +29,7 @@ def register():
         print(currentUser)
         return(redirect('/profile'))
     else:
-        return(redirect('/'))
+        return(redirect('/login_register'))
 
 @app.route('/login', methods = ['POST'])
 def login():
@@ -42,7 +42,7 @@ def login():
         session['user'] = currentUser.id
         return(redirect('/profile'))
     else:
-        return(redirect('/'))
+        return(redirect('/login_register'))
 
 @app.route('/logout')
 def logout():
@@ -54,7 +54,9 @@ def logout():
 def profile():
     if 'user' in session:
         currentUser = user.User.get_user_with_zines(session['user'])
-        return(render_template('profile.html',currentUser = currentUser ))
+        userFriends = currentUser.list_friends(session['user'])[0]
+        userRequests = currentUser.list_friends(session['user'])[1]
+        return(render_template('profile.html',currentUser = currentUser, userFriends = userFriends, userRequests = userRequests ))
     else: return(redirect('/'))
 
 
@@ -115,3 +117,24 @@ def search_users():
         session['userSearch'] = request.form['userSearch']
         return(redirect('/search'))
 
+@app.route('/request/<int:id>', methods = ['POST'])
+def request_friend(id):
+    requestedUser = user.User.getUserById(id)
+    currentUser = user.User.getUserById(session['user'])
+    requestedUserFriends = requestedUser.list_friends(id)[0]
+    if currentUser in requestedUserFriends:
+        flash("you are already friends with this user")
+        return(redirect('/search'))
+    if currentUser in requestedUser.list_friends(id)[1]:
+        flash("you have already submitted a request to this user")
+    else: currentUser.request_friend(id)
+    return(redirect('/search'))
+
+    # needs to store in requested users information the id of the requester
+    # needs to fail if the users are already friends or if the request has already been sent. i.e. validations...
+    # if user(id) in
+        # flash....
+        # return redirect...
+    #if user(id) in requests...
+        #flash...
+        #return redirect...

@@ -20,20 +20,42 @@ class User:
         self.comments = []
         self.friends = []
 
-
-    def list_friends(self,cls):
-        query = 'SELECT * FROM users as usersfriends LEFT JOIN friends ON usersfriends.id = friends.friend_id LEFT JOIN users ON users.id = friends.user_id WHERE users.id = %(id)s'
-        data = {'id':self.id}
+    @classmethod
+    def list_friends(cls, id):
+        query = 'SELECT * FROM users as usersfriends INNER JOIN friends ON usersfriends.id = friends.friend_id INNER JOIN users ON users.id = friends.user_id WHERE users.id = %(id)s'
+        data = {'id':id}
         result = connectToMySQL(db).query_db(query, data)
+        leftsided = []
         for each in result:
+            print(each)
             friend_data = {
-                'id': each['usersfriends.id'],
-                'username': each['usersfriends.username'],
-                'email': each['usersfriend.email'],
-                'password': each['usersfriends.password']
+                'id': each['id'],
+                'username': each['username'],
+                'email': each['email'],
+                'password': each['password']
             }
-            self.friends.append(cls(friend_data))
-        return(self.friends)
+            leftsided.append(cls(friend_data))
+        query = 'SELECT * FROM users as usersfriends INNER JOIN friends on friends.user_id = usersfriends.id INNER JOIN users on users.id = friends.friend_id WHERE users.id = %(id)s'
+        result = connectToMySQL(db).query_db(query, data)
+        rightside = []   
+        if result:
+            for each in result:
+                print(each)
+                friend_data = {
+                    'id': each['users.id'],
+                    'username': each['users.username'],
+                    'email': each['users.email'],
+                    'password': each['users.password']
+                }
+                rightside.append(cls(friend_data))
+        currentUser =  cls.getUserById(id)
+        onesided = []
+        for each in leftsided:
+            if each in rightside:
+                currentUser.friends.append(each)
+            else: 
+                onesided.append(each)
+        return([currentUser.friends,onesided])
 
     # def list_requests(self,cls):
     #     query = 'SELECT * FROM users 
@@ -47,7 +69,7 @@ class User:
 
 
     def request_friend(self, id):
-        query = 'INSERT INTO friends (user_id, friend_id) VALUES(%(selfId)s, %(id)s' 
+        query = 'INSERT INTO friends (user_id, friend_id) VALUES(%(selfId)s, %(id)s)' 
         data = {'selfId':self.id, 'id':id}
         result = connectToMySQL(db).query_db(query,data)
         return(result)
