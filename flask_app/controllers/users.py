@@ -56,7 +56,8 @@ def profile():
         currentUser = user.User.get_user_with_zines(session['user'])
         userFriends = currentUser.list_friends(session['user'])[0]
         userRequests = currentUser.list_friends(session['user'])[1]
-        return(render_template('profile.html',currentUser = currentUser, userFriends = userFriends, userRequests = userRequests ))
+        requestedBy = currentUser.list_friends(session['user'])[2]
+        return(render_template('profile.html',currentUser = currentUser, userFriends = userFriends, userRequests = userRequests, requestedBy = requestedBy ))
     else: return(redirect('/'))
 
 
