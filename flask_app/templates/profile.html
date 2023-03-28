@@ -108,14 +108,26 @@
                 </div>
                 <div class = "right">
                     <div class = "box">
-                        <h3>your friends:</h3>
-                        {%for friend in userFriends%}
-                            {{friend.username}}
-                        {%endfor%}
-                        <h3>your pending friend requests:</h3>
-                        {%for friend in userRequests%}
-                            {{friend.username}}
-                        {%endfor%}
+                        <div class= "list">
+                            <h3>your friends:</h3>
+                            {%for friend in userFriends%}
+                                <a href = "">{{friend.username}}</a>
+                            {%endfor%}
+                        </div>
+                        <div class="list">
+                            <h3>your pending friend requests:</h3>
+                            {%for friend in userRequests%}
+                                {{friend.username}}
+                            {%endfor%}
+                        </div>
+                        <div class="list">
+                            <h3>People requesting friendship with you:</h3>
+                                {%for friend in requestedBy%}
+                                    {{friend.username}}
+                                    <button>Accept</button>
+                                    <button>Deny</button>
+                                {%endfor%}
+                        </div>
                     </div>
 
                 </div>

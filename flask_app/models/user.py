@@ -27,35 +27,46 @@ class User:
         result = connectToMySQL(db).query_db(query, data)
         leftsided = []
         for each in result:
-            print(each)
-            friend_data = {
-                'id': each['id'],
-                'username': each['username'],
-                'email': each['email'],
-                'password': each['password']
-            }
-            leftsided.append(cls(friend_data))
+            print(each['username'] + " leftside")
+            # friend_data = {
+            #     'id': each['id'],
+            #     'username': each['username'],
+            #     'email': each['email'],
+            #     'password': each['password']
+            # }
+            leftId = each['id']
+            leftsided.append(leftId)
+            print(leftsided)
         query = 'SELECT * FROM users as usersfriends INNER JOIN friends on friends.user_id = usersfriends.id INNER JOIN users on users.id = friends.friend_id WHERE users.id = %(id)s'
         result = connectToMySQL(db).query_db(query, data)
-        rightside = []   
+        rightside = []
         if result:
             for each in result:
-                print(each)
-                friend_data = {
-                    'id': each['users.id'],
-                    'username': each['users.username'],
-                    'email': each['users.email'],
-                    'password': each['users.password']
-                }
-                rightside.append(cls(friend_data))
+                print(each['username'] + " rightside")
+                # friend_data = {
+                #     'id': each['users.id'],
+                #     'username': each['users.username'],
+                #     'email': each['users.email'],
+                #     'password': each['users.password']
+                # }
+                rightId = each['id']
+                rightside.append(rightId)
+                print(rightside)
         currentUser =  cls.getUserById(id)
         onesided = []
+        onesideRequested = []
         for each in leftsided:
-            if each in rightside:
-                currentUser.friends.append(each)
+            print(each)
+            if (each in rightside):
+                print("bingo!")
+                currentUser.friends.append(cls.getUserById(each))
             else: 
-                onesided.append(each)
-        return([currentUser.friends,onesided])
+                print("bongo!")
+                onesided.append(cls.getUserById(each))
+        for each in rightside:
+            if not (each in leftsided):
+                onesideRequested.append(cls.getUserById(each))
+        return([currentUser.friends,onesided,onesideRequested])
 
     # def list_requests(self,cls):
     #     query = 'SELECT * FROM users 
@@ -67,12 +78,18 @@ class User:
 
 
 
-
+# does this work does this add rows redundantly? Should I query first the DB to see if this entry exists.
     def request_friend(self, id):
+        validateQuery = 'SELECT * FROM friends WHERE(user_id = %(selfId)s AND friend_id = %(id)s)'
         query = 'INSERT INTO friends (user_id, friend_id) VALUES(%(selfId)s, %(id)s)' 
+        # query = 'IF NOT  (SELECT * FROM friends WHERE (user_id = %(selfId)s and friend_id = %(id)s)) BEGIN INSERT INTO friends(user_id, friend_id) VALUES (%(selfId)s,%(id)s)'
         data = {'selfId':self.id, 'id':id}
-        result = connectToMySQL(db).query_db(query,data)
-        return(result)
+        duplicate = connectToMySQL(db).query_db(validateQuery,data)
+        if not duplicate:
+            result = connectToMySQL(db).query_db(query,data)
+            return(result)
+        else:
+            return(None)
 
 
 
@@ -86,6 +103,7 @@ class User:
         else:
             return(False)
 
+    # should return a User object
     @classmethod
     def getUserById (cls,id):
         query = 'SELECT * FROM users WHERE users.id = %(id)s'
@@ -111,10 +129,6 @@ class User:
             }
             currentUser.zines.append(zine.Zine(zine_data))
         return(currentUser)
-
-
-
-
 
     # pass here from request.form the searchText....i.e the result of the form.
     @classmethod
@@ -198,5 +212,3 @@ class User:
             flash('information does not match an existing user')
             is_valid = False
         return(is_valid)
-            
-        

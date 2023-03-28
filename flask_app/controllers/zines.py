@@ -55,6 +55,47 @@ def upload():
     else:
         flash('issues with file upload. likely an incorrect filetype.')
         return(redirect('/profile'))
+    
+@app.route('/insert/page/<int:id>/<int:index>', methods = ['GET', 'POST'])
+def insert(id, index):
+    def allowed_file(filename):
+        return '.' in filename and filename.rsplit('.',1)[1] in ALLOWED_EXTENSIONS
+    if 'file' not in request.files:
+        flash('no file')
+        return(redirect(f'/edit/{id}'))
+    file = request.files['file']
+    zineId = id
+    zineDict = (zine.Zine.get_by_id(zineId))[0]
+    selectedZine = zine.Zine(zineDict)
+    zinePath = selectedZine.path
+    zinePages = os.listdir(zinePath)
+    # #need index of postiton to insert page
+    # index = len(os.listdir(zinePath))
+    if file.filename == '':
+        flash('no file selected')
+        return(redirect(f'/edit/{id}'))
+    if file and allowed_file(file.filename):
+        namesplit = file.filename.rsplit('.',1)
+        namesplit[0]=str(index)
+        file.filename = namesplit[0] + '.' + namesplit[1]
+        for page in range(len(zinePages)-1, index-1, -1):
+            pageIncremented = zinePages[page].rsplit('.', 1);
+            pageIncremented[0] = int(pageIncremented[0])+1
+            print("the page number is now " + str(pageIncremented[0]))
+            pageIncremented =str(pageIncremented[0])+'.'+pageIncremented[1]
+            print("here we go " + pageIncremented)
+            os.rename(os.path.join(zinePath,zinePages[page]),os.path.join(zinePath,pageIncremented))
+        securedFilename = secure_filename(file.filename)
+        print(securedFilename)
+    # file.save(os.path.join(UPLOAD_FOLDER, filename))
+        file.save(os.path.join(UPLOAD_FOLDER, selectedZine.title, securedFilename))
+        return(redirect(f'/edit/{id}'))
+    else:
+        flash('issues with file upload. likely an incorrect filetype.')
+        return(redirect(f'/edit/{id}'))
+
+
+
 
 @app.route('/edit/<int:id>', methods = ['GET', 'POST'])
 def edit(id):
@@ -80,6 +121,9 @@ def edit(id):
 @app.route('/delete/<int:id>',methods = ['POST'])
 def delete(id):
     zineToDelete = zine.Zine(zine.Zine.get_by_id(id)[0])
+    if zineToDelete.path == UPLOAD_FOLDER:
+        flash('no can do. that this the root directory')
+        return(redirect('/profile'))
     pages = os.listdir(zineToDelete.path)
     if pages:
         flash('directory is not empy')
@@ -105,7 +149,5 @@ def cwd():
     print(UPLOAD_FOLDER)
     title ="a title!"
     print(f'{UPLOAD_FOLDER}\\{title}')
-
-    print
     return(redirect('/profile'))
     

@@ -68,8 +68,10 @@
                             <form action = "/delete/page/{{zineToEdit.id}}/{{loop.index-1}}" method = "post">
                                 <input type = "submit" value = "delete page">
                             </form>
-                            <form action = "/insert/page/{{zineToEdit.id}}/{{loop.index-1}}" method = "post">
-                                <input type = "submit" value = "insert page here">
+                            <form enctype = "multipart/form-data" action = "/insert/page/{{zineToEdit.id}}/{{loop.index-1}}" method = "post">
+                                    <input type = "file" name = "file">
+                                    <input type = "submit" value ="insert page here">
+                                </form>
                             </form>
                         </li>
                         {%endfor%}
