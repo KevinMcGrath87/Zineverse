@@ -9,7 +9,6 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 db = 'zineverse'
 
-
 class User:
     def __init__(self, data):
         self.id = data['id']
@@ -27,41 +26,22 @@ class User:
         result = connectToMySQL(db).query_db(query, data)
         leftsided = []
         for each in result:
-            print(each['username'] + " leftside")
-            # friend_data = {
-            #     'id': each['id'],
-            #     'username': each['username'],
-            #     'email': each['email'],
-            #     'password': each['password']
-            # }
             leftId = each['id']
             leftsided.append(leftId)
-            print(leftsided)
         query = 'SELECT * FROM users as usersfriends INNER JOIN friends on friends.user_id = usersfriends.id INNER JOIN users on users.id = friends.friend_id WHERE users.id = %(id)s'
         result = connectToMySQL(db).query_db(query, data)
         rightside = []
         if result:
             for each in result:
-                print(each['username'] + " rightside")
-                # friend_data = {
-                #     'id': each['users.id'],
-                #     'username': each['users.username'],
-                #     'email': each['users.email'],
-                #     'password': each['users.password']
-                # }
                 rightId = each['id']
                 rightside.append(rightId)
-                print(rightside)
         currentUser =  cls.getUserById(id)
         onesided = []
         onesideRequested = []
         for each in leftsided:
-            print(each)
             if (each in rightside):
-                print("bingo!")
                 currentUser.friends.append(cls.getUserById(each))
             else: 
-                print("bongo!")
                 onesided.append(cls.getUserById(each))
         for each in rightside:
             if not (each in leftsided):
@@ -139,7 +119,6 @@ class User:
         if result:
             users = []
             for user in result:
-                print(user)
                 users.append(cls(user))
             return(users)
         else:
@@ -152,7 +131,6 @@ class User:
         query = 'INSERT INTO users (username, email, password) VALUES(%(username)s,%(email)s, %(password)s)'
         data['password']= bcrypt.generate_password_hash(data['password'])
         user = connectToMySQL(db).query_db(query,data)
-        print(user)
         return(user)
 
     @classmethod

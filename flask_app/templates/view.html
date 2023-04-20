@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel = 'stylesheet' href = "{{url_for('static',filename = 'style.css')}}">
+    {% assets "scss_all"%}
+    <link rel ="stylesheet" type = text/css href = "{{ ASSET_URL }}">
+    {% endassets %}
 </head>
 <body>
     <div class = "container">
@@ -20,29 +22,28 @@
                 <a href = "/profile">Home</a>
             </div>
         </div>
-        <div class = "body">
-            <div class = "left">
+        <div class = "row d-flex align-items-center">
+            <div class = "col-2">
                 <!--here will need to flesh out some jinja to get the pages of the zine.-->
                 <form method = "post" action = "/arrowClick/{{currentPage}}/{{fileArray|length}}/{{zineId}}">
                     <input type = "hidden" name = "click" value = "down">
                     <button type ="submit" >
-                        <img class = "left_arrow" onmouseout="size_down(this)" onmouseover="size_up(this)" src = "{{url_for('static',filename = 'arrow.png')}}"alt="an arrow"> 
+                        <img class = "img-fluid left_arrow" onmouseout="size_down(this)" onmouseover="size_up(this)" src = "{{url_for('static',filename = 'arrow.png')}}"alt="an arrow"> 
                     </button>
                 </form>
                 </div>
-            <div class = "mid">
-                <div class = "box">
+            <div class = "col-8">
+                <div class = "img-fluid">
                     {%set address = ''%}
                     {%set address =  'zinelib' + '/' +zineTitle + '/' + fileArray[currentPage] %}
-                    <img src = "">
-                    <img src = "{{url_for('static',filename = address)}}" alt = "no image displayed">
+                    <img class = "img-fluid img-responsive" src = "{{url_for('static',filename = address)}}" alt = "no image displayed">
                 </div>
             </div>
-            <div class = "right">
+            <div class = "col-2">
                 <form method ="post" action = "/arrowClick/{{currentPage}}/{{fileArray|length}}/{{zineId}}">
                     <input type = "hidden" name ="click" value = "up">
                     <button type = "submit">
-                        <img class = "right_arrow" src = "{{url_for('static',filename = 'arrow.png')}}" alt = "a right arrow">
+                        <img class = "img-fluid right_arrow" src = "{{url_for('static',filename = 'arrow.png')}}" alt = "a right arrow">
                     </button>
                 </form>
             </div>
@@ -84,5 +85,8 @@
     </div>
 
 <script src = "{{url_for('static',filename = 'script.js')}}"></script>
+{% assets "js_all" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 </body>
 </html>

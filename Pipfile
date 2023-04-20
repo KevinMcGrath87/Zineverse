@@ -9,6 +9,9 @@ bcrypt = "*"
 pymysql = "*"
 flask-bcrypt = "*"
 jinja2 = "*"
+flask-assets = "*"
+libsass = "*"
+jsmin = "*"
 
 [dev-packages]
 

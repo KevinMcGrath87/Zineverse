@@ -10,10 +10,6 @@ from werkzeug.utils import secure_filename
 from flask_app.config.utils import UPLOAD_FOLDER, ALLOWED_EXTENSIONS
 
 
-
-
-
-
 @app.route('/create_zine', methods =['POST'])
 def create_zine():
     data = request.form.to_dict()
@@ -48,7 +44,6 @@ def upload():
         namesplit[0]=str(length)
         file.filename = namesplit[0] + '.' + namesplit[1]
         securedFilename = secure_filename(file.filename)
-        print(securedFilename)
     # file.save(os.path.join(UPLOAD_FOLDER, filename))
         file.save(os.path.join(UPLOAD_FOLDER, selectedZine.title, securedFilename))
         return(redirect('/profile'))
@@ -111,10 +106,8 @@ def edit(id):
         data = request.form.to_dict()
         newTitle = data['title']
         oldTitle = zineToEdit.title
-        print(os.path.join(UPLOAD_FOLDER, oldTitle))
         os.rename(os.path.join(UPLOAD_FOLDER, oldTitle),os.path.join(UPLOAD_FOLDER, newTitle))
         data['path']=os.path.join(UPLOAD_FOLDER, newTitle)
-        print(data)
         zine.Zine.update_zine(data)
         return(redirect(f'/edit/{id}'))
 

@@ -1,0 +1,14 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=IBM+Plex+Sans:wght@700&family=Lato&family=Montserrat:wght@800&family=Open+Sans:wght@300&family=Pacifico&family=Roboto+Condensed&family=Roboto+Mono&display=swap');
+
+$primary: black;
+$font-family: "roboto";
+$link-decoration: none;
+$font-family-base: "roboto Mono", "monospace";
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.right_arrow {
+    transform: rotate(180deg);
+}

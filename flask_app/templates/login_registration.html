@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel = 'stylesheet' href = "{{url_for('static',filename = 'style.css')}}">
+    {% assets "scss_all"%}
+    <link rel ="stylesheet" type = text/css href = "{{ ASSET_URL }}">
+{% endassets %}
 </head>
 <body>
     {%with messages = get_flashed_messages()%}
@@ -22,11 +24,10 @@
                 <a href = "">About</a>
             </div>
         </div>
-        <div class = 'mid'><h2> login/register</h2></div>
-        <div class = 'body'>
-            <div class = 'left'>
-                <div class = 'title'>Register User</div>
-                <form class = 'loginForm' action = '/register' method = 'post'>
+        <h2>login/register</h2>
+        <div class = 'row'>
+                <div>Register User</div>
+                <form class = ' col-1 loginForm' action = '/register' method = 'post'>
                     <label for = 'username'>username:</label>
                     <input type = 'text' name = 'username'>
                     <label for = 'email'>Email:</label>
@@ -37,20 +38,23 @@
                     <input type = 'password' name ='confirm_password'>
                     <input type = 'submit'>
                 </form>
-                <div class = "mid"></div>
             </div>
-            <div class = 'right'>
-                <div class = 'title'>Log in</div>
-                <form class = 'loginForm' action = '/login' method = 'post'>
-                    <label for = 'email'>Email:</label>
-                    <input type = 'text' name = 'email'>
-                    <label for = 'password'>Password:</label>
-                    <input type = 'password' name ='password'>
-                    <input type = 'submit'>
-                </form>
+            <div class = 'row'>
+                <div class ="col-2">
+                    <h2 class = 'd-flex'>log in</h2>
+                    <form class = 'loginForm' action = '/login' method = 'post'>
+                        <label for = 'email'>Email:</label>
+                        <input type = 'text' name = 'email'>
+                        <label for = 'password'>Password:</label>
+                        <input type = 'password' name ='password'>
+                        <input type = 'submit'>
+                    </form>
+                </div>
             </div>
-        </div>
 
 </div>
+{% assets "js_all" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 </body>
 </html>

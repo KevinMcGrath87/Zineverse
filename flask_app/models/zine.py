@@ -35,7 +35,6 @@ class Zine:
         data['zineid']=result
         query = "INSERT INTO zineverse.collections(zine_id, user_id) VALUES (%(zineid)s,%(user)s)"
         result = connectToMySQL(db).query_db(query,data)
-        print(result)
         return(result)
 
 # data for this query should be a dict with key value id:<some int> comes form controller?
@@ -52,7 +51,6 @@ class Zine:
         query = 'SELECT * FROM users LEFT JOIN collections ON users.id = collections.user_id LEFT JOIN zines ON collections.zine_id = zines.id WHERE users.id = %(id)s'
         data = {'id':id}
         result = connectToMySQL(db).query_db(query,data)
-        print(result)
         currentUser = user.User(result[0])
         zines = [];
         for zine in result:
@@ -80,7 +78,6 @@ class Zine:
 
     @classmethod
     def get_zine(cls, id):
-        print(id)
         query = 'SELECT path, title FROM zines WHERE zines.id = %(id)s'
         data = {'id':id}
         result = connectToMySQL(db).query_db(query, data)
