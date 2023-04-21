@@ -6,7 +6,6 @@ import os
 import random
 
 
-
 @app.route('/', methods =['GET'])
 def home():
     if 'user' in session:
@@ -26,7 +25,6 @@ def register():
     if user.User.validate(data):
         currentUser = user.User.insertUser(data)
         session['user'] = currentUser
-        print(currentUser)
         return(redirect('/profile'))
     else:
         return(redirect('/login_register'))
@@ -34,11 +32,9 @@ def register():
 @app.route('/login', methods = ['POST'])
 def login():
     data = request.form.to_dict()
-    print(data)
     if user.User.validate_login(data):
         print("validation passed")
         currentUser = user.User.getUserByEmail(data['email'])
-        print(currentUser.username)
         session['user'] = currentUser.id
         return(redirect('/profile'))
     else:
@@ -65,7 +61,6 @@ def profile():
 def view():
     data = request.form.to_dict()
     zineId = data['zineId']
-    print(data)
     page = 0
     return(redirect(f'/viewpage/{zineId}/{page}'))
 
@@ -77,7 +72,6 @@ def viewpage(zineId, currentPage):
     zinePath = zineData[0]['path']
     zineTitle = zineData[0]['title']
     # should print path of zine
-    print(os.listdir(zinePath))
     fileArray = os.listdir(zinePath)
     if fileArray:
     # fileArray.reverse()
@@ -101,9 +95,7 @@ def arrowClick(currentPage, length, zineId):
 def search():
     if 'userSearch' in session:
         data = session['userSearch']
-        print(data)
         users = user.User.user_search(data)
-        print(users)
         session.pop('userSearch')
         return(render_template('search.html', users = users))
     if 'zineSearch' in session:
